@@ -43,41 +43,57 @@
 
 </div>
 </div>
-<h1 style="text-align: center; font-size: 50px">Curva de Bézier Quadrática</h1>
+<h1 style="text-align: center; font-size: 50px">Curva de Hermite - 3 Pontos</h1>
 
 <script type="text/paperscript" canvas="canvas-1">
-  function calc_pontos(P) {
+  function calc_pontos(P_ini, P_fim, T_ini, T_fim) {
     var t = 0.025;
     var cont = 0;
     var resultados = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
     while (t < 1) {
-      resultados[cont] = P[0]*(1-t)*(1-t) + P[1]*2*(1-t)*t + P[2]*t*t;
-      cont += 1;
-      t += 0.025;
+        resultados[cont] = P_ini*(2*t*t*t-3*t*t+1) + P_fim*(3*t*t-2*t*t*t) + T_ini*(-2*t*t+t*t*t+t) + T_fim*(-(t*t)+t*t*t)
+        cont += 1;
+        t += 0.025;
+        if(cont == 36) {
+            console.log(cont, t);
+        }
+        console.log(resultados[36])
     }
     return resultados;
-  }
-  // 250 450 20 110 500 60
+    }
 
-  var R = [250, 450];
-  var G = [20, 110];
-  var B = [500, 60];
-
-  var Px = [R[0], G[0], B[0]];
-  var Py = [R[1], G[1], B[1]];
+  var R = [115, 70];
+  var G = [90, 260];
+  var B = [270, 200];
+  var T_R = [180, 170];
+  var T_G = [-165, -230];
+  var T_B = [100, -230];
 
   var firstPoint = new Point(R[0], R[1]);
   var secondPoint = new Point(G[0], G[1]);
   var thirdPoint = new Point(B[0], B[1]);
+  var t1Point = new Point(T_R[0], T_R[1]);
+  var t2Point = new Point(T_G[0], T_G[1]);
+  var t3Point = new Point(T_B[0], T_B[1]);
 
   var path = new Path(firstPoint, secondPoint);
-  var path2 = new Path(secondPoint, thirdPoint);
   path.strokeColor = 'black';
-  path2.strokeColor = 'black';
-  path.strokeWidth = 5;
-  path2.strokeWidth = 5;
-  
+  path.strokeWidth = 3;
+  var path = new Path(secondPoint, thirdPoint);
+  path.strokeColor = 'black';
+  path.strokeWidth = 3;
+
+  var path = new Path(firstPoint, t1Point);
+  path.strokeColor = 'orange';
+  path.strokeWidth = 2;
+  var path = new Path(secondPoint, t2Point);
+  path.strokeColor = 'orange';
+  path.strokeWidth = 2;
+  var path = new Path(thirdPoint, t3Point);
+  path.strokeColor = 'orange';
+  path.strokeWidth = 2;
+
   p = new Path.Circle(R, 10)
   p.fillColor='red';
   p = new Path.Circle(G, 10)
@@ -85,16 +101,22 @@
   p = new Path.Circle(B, 10)
   p.fillColor='blue';
 
-  var pontos_X = calc_pontos(Px);
-  var pontos_Y = calc_pontos(Py);
+  p = new Path.Circle(T_R, 5)
+  p.fillColor='red';
+  p = new Path.Circle(T_G, 5)
+  p.fillColor='red';
+  p = new Path.Circle(T_B, 5)
+  p.fillColor='blue';
+
+  var pontos_X = calc_pontos(R[0], G[0], T_R[0], T_G[0]);
+  var pontos_Y = calc_pontos(R[1], G[1], T_R[1], T_G[1]);  
 
   ponto = new Point(pontos_X[0],pontos_Y[0])
-  var caminho_ini = new Path(R, ponto);
+  var caminho_ini = new Path(firstPoint, ponto);
   caminho_ini.strokeColor = 'red';
   caminho_ini.strokeWidth = 3;
   p = new Path.Circle(ponto, 3.5)
   p.fillColor='purple';
-  
 
   for (var i = 0; i < 37; i++) {
     ponto_A = new Point(pontos_X[i],pontos_Y[i])
@@ -107,7 +129,7 @@
   }  
 
   ponto = new Point(pontos_X[i],pontos_Y[i])
-  var caminho_fim = new Path(ponto, B);
+  var caminho_fim = new Path(ponto, secondPoint);
   caminho_fim.strokeColor = 'red';
   caminho_fim.strokeWidth = 3;
   p = new Path.Circle(ponto, 3.5)
@@ -116,6 +138,37 @@
   ponto = new Point(pontos_X[i+1],pontos_Y[i+1])
   p = new Path.Circle(ponto, 3.5)
   p.fillColor='purple';
+
+  var pontos_X = calc_pontos(G[0], B[0], T_G[0], T_B[0]);
+  var pontos_Y = calc_pontos(G[1], B[1], T_G[1], T_B[1]);  
+  
+  ponto = new Point(pontos_X[0],pontos_Y[0])
+  var caminho_ini = new Path(secondPoint, ponto);
+  caminho_ini.strokeColor = 'red';
+  caminho_ini.strokeWidth = 3;
+  p = new Path.Circle(ponto, 3.5)
+  p.fillColor='cyan';
+
+  for (var i = 0; i < 37; i++) {
+    ponto_A = new Point(pontos_X[i],pontos_Y[i])
+    ponto_B = new Point(pontos_X[i+1],pontos_Y[i+1])
+    var caminho = new Path(ponto_A, ponto_B);
+    caminho.strokeColor = 'red';
+    caminho.strokeWidth = 3;
+    p = new Path.Circle(ponto_A, 3.5)
+    p.fillColor='cyan';
+  }  
+
+  ponto = new Point(pontos_X[i],pontos_Y[i])
+  var caminho_fim = new Path(ponto, thirdPoint);
+  caminho_fim.strokeColor = 'red';
+  caminho_fim.strokeWidth = 3;
+  p = new Path.Circle(ponto, 3.5)
+  p.fillColor='cyan';
+
+  ponto = new Point(pontos_X[i+1],pontos_Y[i+1])
+  p = new Path.Circle(ponto, 3.5)
+  p.fillColor='cyan';
 </script>
 <div class="canvas">
 <canvas resize="true" id="canvas-1"></canvas>

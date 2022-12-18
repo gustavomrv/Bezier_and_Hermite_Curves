@@ -43,76 +43,90 @@
 
 </div>
 </div>
-<h1 style="text-align: center; font-size: 50px">Curva de Bézier de Grau 1</h1>
+<h1 style="text-align: center; font-size: 50px">Curva de Hermite - 2 Pontos</h1>
 
 <script type="text/paperscript" canvas="canvas-1">
-  function calc_pontos(P) {
+function calc_pontos(P_ini, P_fim, T_ini, T_fim) {
     var t = 0.025;
     var cont = 0;
     var resultados = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
                       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
     while (t < 1) {
-      resultados[cont] = P[0]*(1-t) + P[1]*t;
-      cont += 1;
-      t += 0.025;
+        resultados[cont] = P_ini*(2*t*t*t-3*t*t+1) + P_fim*(3*t*t-2*t*t*t) + T_ini*(-2*t*t+t*t*t+t) + T_fim*(-(t*t)+t*t*t)
+        cont += 1;
+        t += 0.025;
+        if(cont == 36) {
+            console.log(cont, t);
+        }
+        console.log(resultados[36])
     }
     return resultados;
-  }
-  // 250 450 20 110 500 60
+    }
 
-  var R = [250, 450];
-  var G = [500, 60];
+  var P_ini = [115, 70];
+  var P_fim = [90, 260];
+  var T_ini = [180, 170];
+  var T_fim = [-165, -230];
 
-  var Px = [R[0], G[0]];
-  var Py = [R[1], G[1]];
-
-  var firstPoint = new Point(R[0], R[1]);
-  var secondPoint = new Point(G[0], G[1]);
+  var firstPoint = new Point(P_ini[0], P_ini[1]);
+  var secondPoint = new Point(P_fim[0], P_fim[1]);
+  var t1Point = new Point(T_ini[0], T_ini[1]);
+  var t2Point = new Point(T_fim[0], T_fim[1]);
 
   var path = new Path(firstPoint, secondPoint);
   path.strokeColor = 'black';
   path.strokeWidth = 5;
 
-  p = new Path.Circle(R, 10)
+  var caminho_PT_ini = new Path(firstPoint, t1Point);
+  caminho_PT_ini.strokeColor = 'orange';
+  caminho_PT_ini.strokeWidth = 2;
+  var caminho_PT_fim = new Path(secondPoint, t2Point);
+  caminho_PT_fim.strokeColor = 'orange';
+  caminho_PT_fim.strokeWidth = 2;
+
+  p = new Path.Circle(P_ini, 10)
+  p.fillColor='green';
+  p = new Path.Circle(P_fim, 10)
   p.fillColor='red';
-  
-  var pontos_X = calc_pontos(Px);
-  var pontos_Y = calc_pontos(Py);
-  
+  p = new Path.Circle(T_ini, 5)
+  p.fillColor='blue';
+  p = new Path.Circle(T_fim, 5)
+  p.fillColor='blue';
+
+  var pontos_X = calc_pontos(P_ini[0], P_fim[0], T_ini[0], T_fim[0]);
+  var pontos_Y = calc_pontos(P_ini[1], P_fim[1], T_ini[1], T_fim[1]);  
+  console.log(pontos_X[36], pontos_Y[36])
+
   ponto = new Point(pontos_X[0],pontos_Y[0])
-  var caminho_ini = new Path(R, ponto);
+  var caminho_ini = new Path(firstPoint, ponto);
   caminho_ini.strokeColor = 'red';
   caminho_ini.strokeWidth = 3;
   p = new Path.Circle(ponto, 3.5)
   p.fillColor='purple';
-  
-  
+
   for (var i = 0; i < 37; i++) {
-      ponto_A = new Point(pontos_X[i],pontos_Y[i])
-      ponto_B = new Point(pontos_X[i+1],pontos_Y[i+1])
-      var caminho = new Path(ponto_A, ponto_B);
-      caminho.strokeColor = 'red';
-      caminho.strokeWidth = 3;
-      p = new Path.Circle(ponto_A, 3.5)
-      p.fillColor='purple';
-    }  
-    
-    ponto = new Point(pontos_X[i],pontos_Y[i])
-    var caminho_fim = new Path(ponto, G);
-    caminho_fim.strokeColor = 'red';
-    caminho_fim.strokeWidth = 3;
-    p = new Path.Circle(ponto, 3.5)
+    ponto_A = new Point(pontos_X[i],pontos_Y[i])
+    ponto_B = new Point(pontos_X[i+1],pontos_Y[i+1])
+    var caminho = new Path(ponto_A, ponto_B);
+    caminho.strokeColor = 'red';
+    caminho.strokeWidth = 3;
+    p = new Path.Circle(ponto_A, 3.5)
     p.fillColor='purple';
-    
-    ponto = new Point(pontos_X[i+1],pontos_Y[i+1])
-    p = new Path.Circle(ponto, 3.5)
-    p.fillColor='purple';
-    
-    p = new Path.Circle(G, 10)
-    p.fillColor='green';
+  }  
+
+  ponto = new Point(pontos_X[i],pontos_Y[i])
+  var caminho_fim = new Path(ponto, secondPoint);
+  caminho_fim.strokeColor = 'red';
+  caminho_fim.strokeWidth = 3;
+  p = new Path.Circle(ponto, 3.5)
+  p.fillColor='purple';
+
+  ponto = new Point(pontos_X[i+1],pontos_Y[i+1])
+  p = new Path.Circle(ponto, 3.5)
+  p.fillColor='purple';
 </script>
 <div class="canvas">
-    <canvas resize="true" id="canvas-1"></canvas>
+<canvas resize="true" id="canvas-1"></canvas>
 </div>
 </div>
 </article>
