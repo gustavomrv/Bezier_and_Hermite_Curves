@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-touch-fullscreen" content="yes"/>
+  <meta name="msapplication-tap-highlight" content="no"/>
+  <link rel="stylesheet" href="../Curve/style.css"/>
+  <script src="../Curve/jquery.js"></script>
+  <script src="../Curve/paper.js"></script>
+  <script src="../Curve/codemirror.js"></script>
+  <script src="../Curve/scripts.js"></script>
+  <title>Paper.js — Path Simplification</title>
+</head>
+  <body class="fullscreen">
+    <nav>
+      <h1><a href="https://www.google.com.br">Gambiarras Gustavo</a></h1>
+<ul>
+  <li><a href="https://www.google.com.br">GitHub do Brabo</a>
+  </li>
+  <li class="spacer"></li>
+  <li><a href="https://www.google.com.br">Bézier de Grau 1</a>
+  <li class="spacer"></li>
+  <li><a href="https://www.google.com.br">Bézier Quadrática</a>
+  <li class="spacer"></li>
+    <li><a href="https://www.google.com.br">Bézier Cúbica</a>
+  <li class="spacer"></li>
+    </nav>
+<article><div class="paperscript">
+<div class="buttons">
+<div class="button run">Source</div>
+<div class="explain">
+
+</div>
+</div>
+<h1 style="text-align: center; font-size: 50px">Curva de Bézier de Grau 1</h1>
+
+<script type="text/paperscript" canvas="canvas-1">
+  function calc_pontos(P) {
+    var t = 0.025;
+    var cont = 0;
+    var resultados = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+    while (t < 1) {
+      resultados[cont] = P[0]*(1-t) + P[1]*t;
+      cont += 1;
+      t += 0.025;
+    }
+    return resultados;
+  }
+  // 250 450 20 110 500 60
+
+  var R = [250, 450];
+  var G = [500, 60];
+
+  var Px = [R[0], G[0]];
+  var Py = [R[1], G[1]];
+
+  var firstPoint = new Point(R[0], R[1]);
+  var secondPoint = new Point(G[0], G[1]);
+
+  var path = new Path(firstPoint, secondPoint);
+  path.strokeColor = 'black';
+  path.strokeWidth = 5;
+
+  p = new Path.Circle(R, 10)
+  p.fillColor='red';
+  
+  var pontos_X = calc_pontos(Px);
+  var pontos_Y = calc_pontos(Py);
+  
+  ponto = new Point(pontos_X[0],pontos_Y[0])
+  var caminho_ini = new Path(R, ponto);
+  caminho_ini.strokeColor = 'red';
+  caminho_ini.strokeWidth = 3;
+  p = new Path.Circle(ponto, 3.5)
+  p.fillColor='purple';
+  
+  
+  for (var i = 0; i < 37; i++) {
+      ponto_A = new Point(pontos_X[i],pontos_Y[i])
+      ponto_B = new Point(pontos_X[i+1],pontos_Y[i+1])
+      var caminho = new Path(ponto_A, ponto_B);
+      caminho.strokeColor = 'red';
+      caminho.strokeWidth = 3;
+      p = new Path.Circle(ponto_A, 3.5)
+      p.fillColor='purple';
+    }  
+    
+    ponto = new Point(pontos_X[i],pontos_Y[i])
+    var caminho_fim = new Path(ponto, G);
+    caminho_fim.strokeColor = 'red';
+    caminho_fim.strokeWidth = 3;
+    p = new Path.Circle(ponto, 3.5)
+    p.fillColor='purple';
+    
+    ponto = new Point(pontos_X[i+1],pontos_Y[i+1])
+    p = new Path.Circle(ponto, 3.5)
+    p.fillColor='purple';
+    
+    p = new Path.Circle(G, 10)
+    p.fillColor='green';
+</script>
+<div class="canvas">
+    <canvas resize="true" id="canvas-1"></canvas>
+</div>
+</div>
+</article>
+  </body>
+</html>

@@ -21,7 +21,12 @@
   <li><a href="https://www.google.com.br">GitHub do Brabo</a>
   </li>
   <li class="spacer"></li>
-  <li><a href="https://www.google.com.br">Examples</a>
+  <li><a href="https://www.google.com.br">Bézier de Grau 1</a>
+  <li class="spacer"></li>
+  <li><a href="https://www.google.com.br">Bézier Quadrática</a>
+  <li class="spacer"></li>
+    <li><a href="https://www.google.com.br">Bézier Cúbica</a>
+  <li class="spacer"></li>
     </nav>
 <article><div class="paperscript">
 <div class="buttons">
@@ -30,47 +35,54 @@
 
 </div>
 </div>
-<h1 style="text-align: center; font-size: 50px">Curva de Bézier Quadrática</h1>
+<h1 style="text-align: center; font-size: 50px">Curva de Bézier Cúbica</h1>
 
 <script type="text/paperscript" canvas="canvas-1">
-  function calc_pontos(P) {
+function calc_pontos(P) {
     var t = 0.025;
     var cont = 0;
     var resultados = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+                        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
     while (t < 1) {
-      resultados[cont] = P[0]*(1-t)*(1-t) + P[1]*2*(1-t)*t + P[2]*t*t;
-      cont += 1;
-      t += 0.025;
+        resultados[cont] = P[0]*(1-t)*(1-t)*(1-t) + P[1]*3*(1-t)*(1-t)*t + P[2]*3*(1-t)*t*t + P[3]*t*t*t;
+        console.log(resultados)
+        cont += 1;
+        t += 0.025;
     }
     return resultados;
-  }
-  // 250 450 20 110 500 60
+    }
 
-  var R = [250, 450];
-  var G = [20, 110];
-  var B = [500, 60];
+  var R = [50, 150];
+  var G = [25, 300];
+  var B = [250, 250];
+  var Y = [210,30];
 
-  var Px = [R[0], G[0], B[0]];
-  var Py = [R[1], G[1], B[1]];
+  var Px = [R[0], G[0], B[0], Y[0]];
+  var Py = [R[1], G[1], B[1], Y[1]];
 
   var firstPoint = new Point(R[0], R[1]);
   var secondPoint = new Point(G[0], G[1]);
   var thirdPoint = new Point(B[0], B[1]);
+  var fourthPoint = new Point(Y[0], Y[1]);
 
   var path = new Path(firstPoint, secondPoint);
   var path2 = new Path(secondPoint, thirdPoint);
+  var path3 = new Path(thirdPoint, fourthPoint);
   path.strokeColor = 'black';
   path2.strokeColor = 'black';
+  path3.strokeColor = 'black';
   path.strokeWidth = 5;
   path2.strokeWidth = 5;
-  
+  path3.strokeWidth = 5;
+
   p = new Path.Circle(R, 10)
   p.fillColor='red';
   p = new Path.Circle(G, 10)
   p.fillColor='green';
   p = new Path.Circle(B, 10)
   p.fillColor='blue';
+  p = new Path.Circle(Y, 10)
+  p.fillColor='yellow';
 
   var pontos_X = calc_pontos(Px);
   var pontos_Y = calc_pontos(Py);
@@ -94,7 +106,7 @@
   }  
 
   ponto = new Point(pontos_X[i],pontos_Y[i])
-  var caminho_fim = new Path(ponto, B);
+  var caminho_fim = new Path(ponto, Y);
   caminho_fim.strokeColor = 'red';
   caminho_fim.strokeWidth = 3;
   p = new Path.Circle(ponto, 3.5)
