@@ -12,16 +12,6 @@
   <script src="../Curve/paper.js"></script>
   <script src="../Curve/codemirror.js"></script>
   <script src="../Curve/scripts.js"></script>
-  <script>
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-10082945-6']);
-    _gaq.push(['_trackPageview']);
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
   <title>Paper.js — Path Simplification</title>
 </head>
   <body class="fullscreen">
@@ -41,40 +31,78 @@
 </div>
 </div>
 <h1 style="text-align: center; font-size: 50px">Curva de Bézier Quadrática</h1>
+
 <script type="text/paperscript" canvas="canvas-1">
-  var handleIn = new Point(-80, -100);
-  var handleOut = new Point(80, 100);
+  function calc_pontos(P) {
+    var t = 0.025;
+    var cont = 0;
+    var resultados = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+    while (t < 1) {
+      resultados[cont] = P[0]*(1-t)*(1-t) + P[1]*2*(1-t)*t + P[2]*t*t;
+      cont += 1;
+      t += 0.025;
+    }
+    return resultados;
+  }
+  // 250 450 20 110 500 60
 
-  var firstPoint = new Point(110, 150);
-  var firstSegment = new Segment(firstPoint, null, null);
+  var R = [250, 450];
+  var G = [20, 110];
+  var B = [500, 60];
 
-  var secondPoint = new Point(25, 190);
-  var secondSegment = new Segment(secondPoint, null, null);
+  var Px = [R[0], G[0], B[0]];
+  var Py = [R[1], G[1], B[1]];
 
-  var thirdPoint = new Point(210, 250);
-  var secondSegment = new Segment(thirdPoint, null, null);
-
-  var fourthPoint = new Point(210, 30);
+  var firstPoint = new Point(R[0], R[1]);
+  var secondPoint = new Point(G[0], G[1]);
+  var thirdPoint = new Point(B[0], B[1]);
 
   var path = new Path(firstPoint, secondPoint);
   var path2 = new Path(secondPoint, thirdPoint);
-  var path3 = new Path(thirdPoint, fourthPoint);
-  var path4 = new Path(fourthPoint, firstPoint);
-  path.strokeColor = 'red';
-  path2.strokeColor = 'green';
-  path3.strokeColor = 'blue';
-  path4.strokeColor = 'purple';
-
-  var c = new Curve(firstPoint, secondPoint, thirdPoint, fourthPoint);
-  var path_c = new Path(c.segment1, c.segment2);
-  path_c.strokeColor = 'black';
-
-
+  path.strokeColor = 'black';
+  path2.strokeColor = 'black';
   path.strokeWidth = 5;
   path2.strokeWidth = 5;
-  path3.strokeWidth = 5;
-  path4.strokeWidth = 5;
+  
+  p = new Path.Circle(R, 10)
+  p.fillColor='red';
+  p = new Path.Circle(G, 10)
+  p.fillColor='green';
+  p = new Path.Circle(B, 10)
+  p.fillColor='blue';
 
+  var pontos_X = calc_pontos(Px);
+  var pontos_Y = calc_pontos(Py);
+
+  ponto = new Point(pontos_X[0],pontos_Y[0])
+  var caminho_ini = new Path(R, ponto);
+  caminho_ini.strokeColor = 'red';
+  caminho_ini.strokeWidth = 3;
+  p = new Path.Circle(ponto, 3.5)
+  p.fillColor='purple';
+  
+
+  for (var i = 0; i < 37; i++) {
+    ponto_A = new Point(pontos_X[i],pontos_Y[i])
+    ponto_B = new Point(pontos_X[i+1],pontos_Y[i+1])
+    var caminho = new Path(ponto_A, ponto_B);
+    caminho.strokeColor = 'red';
+    caminho.strokeWidth = 3;
+    p = new Path.Circle(ponto_A, 3.5)
+    p.fillColor='purple';
+  }  
+
+  ponto = new Point(pontos_X[i],pontos_Y[i])
+  var caminho_fim = new Path(ponto, B);
+  caminho_fim.strokeColor = 'red';
+  caminho_fim.strokeWidth = 3;
+  p = new Path.Circle(ponto, 3.5)
+  p.fillColor='purple';
+
+  ponto = new Point(pontos_X[i+1],pontos_Y[i+1])
+  p = new Path.Circle(ponto, 3.5)
+  p.fillColor='purple';
 </script>
 <div class="canvas">
 <canvas resize="true" id="canvas-1"></canvas>
