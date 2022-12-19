@@ -7,11 +7,11 @@
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-touch-fullscreen" content="yes"/>
   <meta name="msapplication-tap-highlight" content="no"/>
-  <link rel="stylesheet" href="../Curve/style.css"/>
-  <script src="../Curve/jquery.js"></script>
-  <script src="../Curve/paper.js"></script>
-  <script src="../Curve/codemirror.js"></script>
-  <script src="../Curve/scripts.js"></script>
+  <link rel="stylesheet" href="./style.css"/>
+  <script src="./jquery.js"></script>
+  <script src="./paper.js"></script>
+  <script src="./codemirror.js"></script>
+  <script src="./scripts.js"></script>
   <title>Paper.js — Path Simplification</title>
 </head>
   <body class="fullscreen">
@@ -68,19 +68,19 @@ function calc_pontos(P_ini, P_fim, T_ini, T_fim) {
   var T_ini = [180, 170];
   var T_fim = [-165, -230];
 
-  var firstPoint = new Point(P_ini[0], P_ini[1]);
-  var secondPoint = new Point(P_fim[0], P_fim[1]);
+  var beginPoint = new Point(P_ini[0], P_ini[1]);
+  var lastPoint = new Point(P_fim[0], P_fim[1]);
   var t1Point = new Point(T_ini[0], T_ini[1]);
   var t2Point = new Point(T_fim[0], T_fim[1]);
 
-  var path = new Path(firstPoint, secondPoint);
-  path.strokeColor = 'black';
+  var path = new Path(beginPoint, lastPoint);
+  //path.strokeColor = 'black';
   path.strokeWidth = 5;
 
-  var caminho_PT_ini = new Path(firstPoint, t1Point);
+  var caminho_PT_ini = new Path(beginPoint, t1Point);
   caminho_PT_ini.strokeColor = 'orange';
   caminho_PT_ini.strokeWidth = 2;
-  var caminho_PT_fim = new Path(secondPoint, t2Point);
+  var caminho_PT_fim = new Path(lastPoint, t2Point);
   caminho_PT_fim.strokeColor = 'orange';
   caminho_PT_fim.strokeWidth = 2;
 
@@ -98,7 +98,7 @@ function calc_pontos(P_ini, P_fim, T_ini, T_fim) {
   console.log(pontos_X[36], pontos_Y[36])
 
   ponto = new Point(pontos_X[0],pontos_Y[0])
-  var caminho_ini = new Path(firstPoint, ponto);
+  var caminho_ini = new Path(beginPoint, ponto);
   caminho_ini.strokeColor = 'red';
   caminho_ini.strokeWidth = 3;
   p = new Path.Circle(ponto, 3.5)
@@ -115,7 +115,7 @@ function calc_pontos(P_ini, P_fim, T_ini, T_fim) {
   }  
 
   ponto = new Point(pontos_X[i],pontos_Y[i])
-  var caminho_fim = new Path(ponto, secondPoint);
+  var caminho_fim = new Path(ponto, lastPoint);
   caminho_fim.strokeColor = 'red';
   caminho_fim.strokeWidth = 3;
   p = new Path.Circle(ponto, 3.5)
