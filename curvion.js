@@ -4,12 +4,16 @@
 
 const Curvion = (() => {
   let canvasEl;
+  let pickTarget = null;
+  let pickColor = '#2f8fe4';
+  let pickMarkers = {};
 
   function setup(canvasId, readoutId) {
     canvasEl = document.getElementById(canvasId);
     paper.setup(canvasEl);
     resize();
     window.addEventListener('resize', resize);
+    drawGrid();
 
     if (readoutId) {
       const readout = document.getElementById(readoutId);
@@ -23,6 +27,75 @@ const Curvion = (() => {
         readout.textContent = '';
       });
     }
+
+    canvasEl.addEventListener('click', (e) => {
+      if (!pickTarget) return;
+
+      const rect = canvasEl.getBoundingClientRect();
+      const x = Math.round(e.clientX - rect.left);
+      const y = Math.round(e.clientY - rect.top);
+
+      const xField = document.getElementById(pickTarget + '-x');
+      const yField = document.getElementById(pickTarget + '-y');
+      if (xField) xField.value = x;
+      if (yField) yField.value = y;
+
+      // So marca visualmente o ponto escolhido -- nao redesenha a curva.
+      setMarker(pickTarget, x, y, pickColor);
+
+      stopPicking();
+    });
+  }
+
+  function setMarker(prefix, x, y, color) {
+    if (pickMarkers[prefix]) {
+      pickMarkers[prefix].remove();
+    }
+    const marker = new paper.Path.Circle(new paper.Point(x, y), 6);
+    marker.fillColor = color;
+    marker.strokeColor = '#ffffff';
+    marker.strokeWidth = 1.5;
+    pickMarkers[prefix] = marker;
+  }
+
+  function removeMarker(prefix) {
+    if (pickMarkers[prefix]) {
+      pickMarkers[prefix].remove();
+      delete pickMarkers[prefix];
+    }
+  }
+
+  // Le os campos X/Y de `prefix` e atualiza (ou remove, se invalido) a marca
+  // correspondente no canvas. Usado para refletir digitacao manual nos
+  // campos, sem esperar o clique em "Desenhar Curva".
+  function syncMarker(prefix, color) {
+    const [x, y] = readPoint(prefix);
+    if (Number.isFinite(x) && Number.isFinite(y)) {
+      setMarker(prefix, x, y, color);
+    } else {
+      removeMarker(prefix);
+    }
+  }
+
+  // Ativa o modo de selecionar um ponto clicando no canvas. Chamar de novo
+  // com o mesmo alvo cancela o modo (toggle).
+  function startPicking(prefix, color) {
+    if (pickTarget === prefix) {
+      stopPicking();
+      return;
+    }
+    pickTarget = prefix;
+    pickColor = color;
+    if (canvasEl) canvasEl.style.cursor = 'crosshair';
+    document.querySelectorAll('.pick-btn').forEach((b) => b.classList.remove('picking'));
+    const btn = document.querySelector('.pick-btn[data-target="' + prefix + '"]');
+    if (btn) btn.classList.add('picking');
+  }
+
+  function stopPicking() {
+    pickTarget = null;
+    if (canvasEl) canvasEl.style.cursor = 'default';
+    document.querySelectorAll('.pick-btn').forEach((b) => b.classList.remove('picking'));
   }
 
   function resize() {
@@ -31,6 +104,7 @@ const Curvion = (() => {
 
   function clear() {
     paper.project.activeLayer.removeChildren();
+    pickMarkers = {};
   }
 
   function readPoint(prefix) {
@@ -101,7 +175,7 @@ const Curvion = (() => {
     label.content = text;
     label.fillColor = color;
     label.fontSize = 11;
-    label.fontFamily = 'Consolas, "Courier New", monospace';
+    label.fontFamily = '"Roboto Mono", Consolas, "Courier New", monospace';
     label.fontWeight = 'bold';
     return label;
   }
@@ -129,7 +203,7 @@ const Curvion = (() => {
         label.content = String(x);
         label.fillColor = textColor;
         label.fontSize = 10;
-        label.fontFamily = 'Consolas, "Courier New", monospace';
+        label.fontFamily = '"Roboto Mono", Consolas, "Courier New", monospace';
       }
     }
     for (let y = 0; y <= h; y += step) {
@@ -142,7 +216,7 @@ const Curvion = (() => {
         label.content = String(y);
         label.fillColor = textColor;
         label.fontSize = 10;
-        label.fontFamily = 'Consolas, "Courier New", monospace';
+        label.fontFamily = '"Roboto Mono", Consolas, "Courier New", monospace';
       }
     }
   }
@@ -179,5 +253,6 @@ const Curvion = (() => {
     setup, clear, readPoint, allValid, sample,
     bezierLinear, bezierQuadratic, bezierCubic, hermite,
     drawPoint, drawLine, drawPolyline, drawLabel, drawGrid, exportPNG,
+    startPicking, stopPicking, syncMarker,
   };
 })();

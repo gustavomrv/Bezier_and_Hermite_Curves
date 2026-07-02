@@ -4,6 +4,9 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
 <title>CurvionBH Simu — Bézier Quadrática</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./curvion.css"/>
 <script src="./paper.js"></script>
 </head>
@@ -18,6 +21,7 @@
     <nav class="curve-nav">
       <ul>
         <li><a href="./index.html">◂ Início</a></li>
+        <li><a href="./teoria.html">Teoria</a></li>
         <li><a href="./grau1.html">Bézier Linear</a></li>
         <li><a href="./quadratica.html" class="active">Bézier Quadrática</a></li>
         <li><a href="./cubica.html">Bézier Cúbica</a></li>
@@ -38,6 +42,7 @@
         <div class="field-row">
           <div class="field"><label for="p0-x">X</label><input type="number" step="any" id="p0-x" value="250"></div>
           <div class="field"><label for="p0-y">Y</label><input type="number" step="any" id="p0-y" value="450"></div>
+          <button type="button" class="pick-btn" data-target="p0" data-color="#e4342f" title="Marcar P0 clicando no plano">⌖</button>
         </div>
       </div>
 
@@ -46,6 +51,7 @@
         <div class="field-row">
           <div class="field"><label for="p1-x">X</label><input type="number" step="any" id="p1-x" value="20"></div>
           <div class="field"><label for="p1-y">Y</label><input type="number" step="any" id="p1-y" value="110"></div>
+          <button type="button" class="pick-btn" data-target="p1" data-color="#2ecc71" title="Marcar P1 clicando no plano">⌖</button>
         </div>
       </div>
 
@@ -54,6 +60,7 @@
         <div class="field-row">
           <div class="field"><label for="p2-x">X</label><input type="number" step="any" id="p2-x" value="500"></div>
           <div class="field"><label for="p2-y">Y</label><input type="number" step="any" id="p2-y" value="60"></div>
+          <button type="button" class="pick-btn" data-target="p2" data-color="#2f8fe4" title="Marcar P2 clicando no plano">⌖</button>
         </div>
       </div>
 
@@ -75,6 +82,24 @@
 <script src="./curvion.js"></script>
 <script>
   Curvion.setup('canvas-1', 'coord-readout');
+
+  document.querySelectorAll('.pick-btn').forEach(function (btn) {
+    const target = btn.dataset.target;
+    const color = btn.dataset.color;
+    btn.style.setProperty('--pick-color', color);
+
+    btn.addEventListener('click', function () {
+      Curvion.startPicking(target, color);
+    });
+
+    ['-x', '-y'].forEach(function (suffix) {
+      document.getElementById(target + suffix).addEventListener('input', function () {
+        Curvion.syncMarker(target, color);
+      });
+    });
+
+    Curvion.syncMarker(target, color);
+  });
 
   document.getElementById('draw-btn').addEventListener('click', function () {
     const P0 = Curvion.readPoint('p0');

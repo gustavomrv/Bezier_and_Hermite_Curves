@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
+<title>CurvionBH Simu — Teoria</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./curvion.css"/>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <p class="logo">CURVIONBH SIMU</p>
+      <p class="tagline">Simulador de Curvas Paramétricas</p>
+    </div>
+
+    <nav class="curve-nav">
+      <ul>
+        <li><a href="./index.html">◂ Início</a></li>
+        <li><a href="./teoria.html" class="active">Teoria</a></li>
+        <li><a href="./grau1.html">Bézier Linear</a></li>
+        <li><a href="./quadratica.html">Bézier Quadrática</a></li>
+        <li><a href="./cubica.html">Bézier Cúbica</a></li>
+        <li><a href="./hermite2.html">Hermite 2 Pontos</a></li>
+        <li><a href="./hermite3.html">Hermite 3 Pontos</a></li>
+        <li><a href="./hermite4.html">Hermite 4 Pontos</a></li>
+      </ul>
+      <a class="external" href="https://github.com/gustavomrv/Bezier_and_Hermite_Curves" target="_blank" rel="noopener">Código completo no GitHub ↗</a>
+    </nav>
+  </aside>
+
+  <main class="home-main">
+    <div class="theory-intro">
+      <h1>A matemática por trás das curvas</h1>
+      <p>
+        Uma curva paramétrica não é descrita como <code>y = f(x)</code>, mas como um
+        conjunto de funções que dão a posição de um ponto em função de um parâmetro
+        auxiliar <code>t</code>, que varia de 0 a 1:
+      </p>
+      <div class="formula">
+        <span class="formula-caption">Definição</span>
+        <div class="formula-row">x = x(t)</div>
+        <div class="formula-row">y = y(t)</div>
+        <div class="formula-row" style="color:#7c8f7c; font-size:12px;">t ∈ [0, 1]</div>
+      </div>
+      <p>
+        Para cada valor de <code>t</code> você obtém um ponto <code>(x(t), y(t))</code>.
+        Variando <code>t</code> continuamente, esses pontos traçam a curva. Essa forma
+        não tem a limitação de <code>y = f(x)</code> (que só permite um valor de y por
+        x) — X e Y são independentes, cada um função de <code>t</code>.
+      </p>
+      <p>
+        Como não existe uma forma de desenhar uma curva contínua num canvas de pixels,
+        o CurvionBH Simu calcula <code>(x(t), y(t))</code> em 40 valores igualmente
+        espaçados de <code>t</code> e liga os pontos resultantes com segmentos de reta
+        curtos — quanto mais amostras, mais suave a curva parece.
+      </p>
+    </div>
+
+    <section class="theory-section theory-section--bezier">
+      <h2>Curvas de Bézier</h2>
+      <p>
+        Cada ponto da curva é uma combinação ponderada dos pontos de controle, usando
+        os polinômios de Bernstein como pesos. Em <code>t = 0</code> a curva está
+        exatamente no primeiro ponto de controle; em <code>t = 1</code>, exatamente no
+        último; nos valores intermediários, uma mistura ponderada de todos eles — os
+        pontos do meio puxam a curva na direção deles sem que ela passe por cima deles.
+      </p>
+
+      <h3>Grau 1 — Linear (2 pontos)</h3>
+      <div class="formula">
+        <div class="formula-eq"><span class="fn">B(t)</span><span class="expr">= P₀·(1 − t) + P₁·t</span></div>
+      </div>
+      <a class="theory-try" href="./grau1.html">Testar Bézier Linear →</a>
+
+      <h3>Grau 2 — Quadrática (3 pontos)</h3>
+      <div class="formula">
+        <div class="formula-eq"><span class="fn">B(t)</span><span class="expr">= P₀·(1 − t)² + P₁·2(1 − t)t + P₂·t²</span></div>
+      </div>
+      <a class="theory-try" href="./quadratica.html">Testar Bézier Quadrática →</a>
+
+      <h3>Grau 3 — Cúbica (4 pontos)</h3>
+      <div class="formula">
+        <div class="formula-eq"><span class="fn">B(t)</span><span class="expr">= P₀·(1 − t)³ + P₁·3(1 − t)²t + P₂·3(1 − t)t² + P₃·t³</span></div>
+      </div>
+      <a class="theory-try" href="./cubica.html">Testar Bézier Cúbica →</a>
+    </section>
+
+    <section class="theory-section theory-section--hermite">
+      <h2>Curvas de Hermite</h2>
+      <p>
+        Diferente de Bézier, aqui a curva é definida pela posição <strong>e</strong>
+        pela tangente em cada extremidade — por isso ela "sai" e "chega" nos pontos na
+        direção indicada pela tangente, em vez de apenas ser puxada por pontos de
+        controle intermediários.
+      </p>
+
+      <h3>Fórmula geral (2 pontos + 2 tangentes)</h3>
+      <div class="formula">
+        <div class="formula-eq"><span class="fn">H(t)</span><span class="expr">= P₀·h₀₀(t) + T₀·h₁₀(t) + P₁·h₀₁(t) + T₁·h₁₁(t)</span></div>
+      </div>
+      <div class="formula">
+        <span class="formula-caption">Funções de blending</span>
+        <div class="formula-row">h₀₀(t) = 2t³ − 3t² + 1</div>
+        <div class="formula-row">h₁₀(t) = t³ − 2t² + t</div>
+        <div class="formula-row">h₀₁(t) = −2t³ + 3t²</div>
+        <div class="formula-row">h₁₁(t) = t³ − t²</div>
+      </div>
+      <a class="theory-try" href="./hermite2.html">Testar Hermite 2 Pontos →</a>
+
+      <h3>3 e 4 pontos — splines</h3>
+      <p>
+        Com mais de 2 pontos, a curva de Hermite deixa de ser um único trecho e passa a
+        ser uma <strong>spline</strong>: a mesma fórmula acima é aplicada a cada par de
+        pontos consecutivos (com suas respectivas tangentes), gerando vários segmentos
+        que se encontram nos pontos compartilhados.
+      </p>
+      <a class="theory-try" href="./hermite3.html">Testar Hermite 3 Pontos →</a>
+      &nbsp;·&nbsp;
+      <a class="theory-try" href="./hermite4.html">Testar Hermite 4 Pontos →</a>
+    </section>
+  </main>
+</div>
+</body>
+</html>
