@@ -1,120 +1,100 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
-  <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <meta name="apple-touch-fullscreen" content="yes"/>
-  <meta name="msapplication-tap-highlight" content="no"/>
-  <link rel="stylesheet" href="./style.css"/>
-  <script src="./jquery.js"></script>
-  <script src="./paper.js"></script>
-  <script src="./codemirror.js"></script>
-  <script src="./scripts.js"></script>
-  <title>Paper.js — Path Simplification</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
+<title>CurvionBH Simu — Bézier Linear</title>
+<link rel="stylesheet" href="./curvion.css"/>
+<script src="./paper.js"></script>
 </head>
-  <body class="fullscreen">
-    <nav>
-      <h1><a href="https://github.com/gustavomrv/Bezier_and_Hermite_Curves">Curve Simulator</a></h1>
-      <ul>  
-      <li><a href="https://github.com/gustavomrv/Bezier_and_Hermite_Curves">Código Completo</a>
-      <li class="spacer"></li>
-      <li><a href="./grau1.html">Bézier Linear</a>
-      <li class="spacer"></li>
-      <li><a href="./index.html">Bézier Quadrática</a>
-      <li class="spacer"></li>
-        <li><a href="./cubica.html">Bézier Cúbica</a>
-      <li class="spacer"></li>
-      <li class="spacer"></li>
-        <li><a href="./hermite2.html">Hermite 2 Pontos</a>
-      <li class="spacer"></li>
-      <li class="spacer"></li>
-        <li><a href="./hermite3.html">Hermite 3 Pontos</a>
-      <li class="spacer"></li>
-      <li class="spacer"></li>
-        <li><a href="./hermite4.html">Hermite 4 Pontos</a>
-      <li class="spacer"></li>
-      </nav>
-<article><div class="paperscript">
-<div class="buttons">
-<div class="button run">Source</div>
-<div class="explain">
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <p class="logo">CURVIONBH SIMU</p>
+      <p class="tagline">Simulador de Curvas Paramétricas</p>
+    </div>
 
-</div>
-</div>
-<h1 style="text-align: center; font-size: 50px">Curva de Bézier de Grau 1</h1>
+    <nav class="curve-nav">
+      <ul>
+        <li><a href="./index.html">◂ Início</a></li>
+        <li><a href="./grau1.html" class="active">Bézier Linear</a></li>
+        <li><a href="./quadratica.html">Bézier Quadrática</a></li>
+        <li><a href="./cubica.html">Bézier Cúbica</a></li>
+        <li><a href="./hermite2.html">Hermite 2 Pontos</a></li>
+        <li><a href="./hermite3.html">Hermite 3 Pontos</a></li>
+        <li><a href="./hermite4.html">Hermite 4 Pontos</a></li>
+      </ul>
+      <a class="external" href="https://github.com/gustavomrv/Bezier_and_Hermite_Curves" target="_blank" rel="noopener">Código completo no GitHub ↗</a>
+    </nav>
 
-<script type="text/paperscript" canvas="canvas-1">
-  function calc_pontos(P) {
-    var t = 0.025;
-    var cont = 0;
-    var resultados = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-    while (t < 1) {
-      resultados[cont] = P[0]*(1-t) + P[1]*t;
-      cont += 1;
-      t += 0.025;
+    <hr class="divider"/>
+
+    <form class="curve-form" onsubmit="return false;">
+      <p class="form-title">Curva de Bézier — Grau 1</p>
+
+      <div class="point-group">
+        <div class="label"><span class="dot" style="color:#e4342f"></span>Ponto Inicial (P0)</div>
+        <div class="field-row">
+          <div class="field"><label for="p0-x">X</label><input type="number" step="any" id="p0-x" value="250"></div>
+          <div class="field"><label for="p0-y">Y</label><input type="number" step="any" id="p0-y" value="450"></div>
+        </div>
+      </div>
+
+      <div class="point-group">
+        <div class="label"><span class="dot" style="color:#2ecc71"></span>Ponto Final (P1)</div>
+        <div class="field-row">
+          <div class="field"><label for="p1-x">X</label><input type="number" step="any" id="p1-x" value="500"></div>
+          <div class="field"><label for="p1-y">Y</label><input type="number" step="any" id="p1-y" value="60"></div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="draw-btn" id="draw-btn">Desenhar Curva</button>
+        <button type="button" class="export-btn" id="export-btn" disabled>Exportar PNG</button>
+      </div>
+    </form>
+  </aside>
+
+  <main class="canvas-area">
+    <div class="canvas-title">Bézier Linear</div>
+    <div class="coord-readout" id="coord-readout"></div>
+    <canvas id="canvas-1"></canvas>
+    <p class="canvas-hint">Preencha as coordenadas e clique em "Desenhar Curva"</p>
+  </main>
+</div>
+
+<script src="./curvion.js"></script>
+<script>
+  Curvion.setup('canvas-1', 'coord-readout');
+
+  document.getElementById('draw-btn').addEventListener('click', function () {
+    const P0 = Curvion.readPoint('p0');
+    const P1 = Curvion.readPoint('p1');
+
+    if (!Curvion.allValid([P0, P1])) {
+      alert('Preencha todas as coordenadas com números válidos.');
+      return;
     }
-    return resultados;
-  }
-  // 250 450 20 110 500 60
 
-  var R = [250, 450];
-  var G = [500, 60];
+    Curvion.clear();
+    Curvion.drawGrid();
+    Curvion.drawLine(P0, P1, '#111111', 2);
 
-  var Px = [R[0], G[0]];
-  var Py = [R[1], G[1]];
+    const curva = Curvion.sample((t) => Curvion.bezierLinear(t, P0, P1));
+    Curvion.drawPolyline(curva, '#e4342f', 3);
 
-  var firstPoint = new Point(R[0], R[1]);
-  var secondPoint = new Point(G[0], G[1]);
+    Curvion.drawPoint(P0, '#e4342f', 8);
+    Curvion.drawPoint(P1, '#2ecc71', 8);
+    Curvion.drawLabel(P0, `P0 (${P0[0]}, ${P0[1]})`, '#e4342f');
+    Curvion.drawLabel(P1, `P1 (${P1[0]}, ${P1[1]})`, '#2ecc71');
 
-  var path = new Path(firstPoint, secondPoint);
-  path.strokeColor = 'black';
-  path.strokeWidth = 5;
+    document.getElementById('export-btn').disabled = false;
+  });
 
-  p = new Path.Circle(R, 10)
-  p.fillColor='red';
-  
-  var pontos_X = calc_pontos(Px);
-  var pontos_Y = calc_pontos(Py);
-  
-  ponto = new Point(pontos_X[0],pontos_Y[0])
-  var caminho_ini = new Path(R, ponto);
-  caminho_ini.strokeColor = 'red';
-  caminho_ini.strokeWidth = 3;
-  p = new Path.Circle(ponto, 3.5)
-  p.fillColor='purple';
-  
-  
-  for (var i = 0; i < 37; i++) {
-      ponto_A = new Point(pontos_X[i],pontos_Y[i])
-      ponto_B = new Point(pontos_X[i+1],pontos_Y[i+1])
-      var caminho = new Path(ponto_A, ponto_B);
-      caminho.strokeColor = 'red';
-      caminho.strokeWidth = 3;
-      p = new Path.Circle(ponto_A, 3.5)
-      p.fillColor='purple';
-    }  
-    
-    ponto = new Point(pontos_X[i],pontos_Y[i])
-    var caminho_fim = new Path(ponto, G);
-    caminho_fim.strokeColor = 'red';
-    caminho_fim.strokeWidth = 3;
-    p = new Path.Circle(ponto, 3.5)
-    p.fillColor='purple';
-    
-    ponto = new Point(pontos_X[i+1],pontos_Y[i+1])
-    p = new Path.Circle(ponto, 3.5)
-    p.fillColor='purple';
-    
-    p = new Path.Circle(G, 10)
-    p.fillColor='green';
+  document.getElementById('export-btn').addEventListener('click', function () {
+    Curvion.exportPNG('bezier-linear.png');
+  });
 </script>
-<div class="canvas">
-    <canvas resize="true" id="canvas-1"></canvas>
-</div>
-</div>
-</article>
-  </body>
+</body>
 </html>

@@ -1,126 +1,93 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
-  <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <meta name="apple-touch-fullscreen" content="yes"/>
-  <meta name="msapplication-tap-highlight" content="no"/>
-  <link rel="stylesheet" href="./style.css"/>
-  <script src="./jquery.js"></script>
-  <script src="./paper.js"></script>
-  <script src="./codemirror.js"></script>
-  <script src="./scripts.js"></script>
-  <title>Paper.js — Path Simplification</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
+<title>CurvionBH Simu — Simulador de Curvas Paramétricas</title>
+<link rel="stylesheet" href="./curvion.css"/>
 </head>
-  <body class="fullscreen">
-    <nav>
-      <h1><a href="https://github.com/gustavomrv/Bezier_and_Hermite_Curves">Curve Simulator</a></h1>
-      <ul>  
-      <li><a href="https://github.com/gustavomrv/Bezier_and_Hermite_Curves">Código Completo</a>
-      <li class="spacer"></li>
-      <li><a href="./grau1.html">Bézier Linear</a>
-      <li class="spacer"></li>
-      <li><a href="./index.html">Bézier Quadrática</a>
-      <li class="spacer"></li>
-        <li><a href="./cubica.html">Bézier Cúbica</a>
-      <li class="spacer"></li>
-      <li class="spacer"></li>
-        <li><a href="./hermite2.html">Hermite 2 Pontos</a>
-      <li class="spacer"></li>
-      <li class="spacer"></li>
-        <li><a href="./hermite3.html">Hermite 3 Pontos</a>
-      <li class="spacer"></li>
-      <li class="spacer"></li>
-        <li><a href="./hermite4.html">Hermite 4 Pontos</a>
-      <li class="spacer"></li>
-      </nav>
-<article><div class="paperscript">
-<div class="buttons">
-<div class="button run">Source</div>
-<div class="explain">
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <p class="logo">CURVIONBH SIMU</p>
+      <p class="tagline">Simulador de Curvas Paramétricas</p>
+    </div>
 
+    <nav class="curve-nav">
+      <ul>
+        <li><a href="./index.html" class="active">◂ Início</a></li>
+        <li><a href="./grau1.html">Bézier Linear</a></li>
+        <li><a href="./quadratica.html">Bézier Quadrática</a></li>
+        <li><a href="./cubica.html">Bézier Cúbica</a></li>
+        <li><a href="./hermite2.html">Hermite 2 Pontos</a></li>
+        <li><a href="./hermite3.html">Hermite 3 Pontos</a></li>
+        <li><a href="./hermite4.html">Hermite 4 Pontos</a></li>
+      </ul>
+      <a class="external" href="https://github.com/gustavomrv/Bezier_and_Hermite_Curves" target="_blank" rel="noopener">Código completo no GitHub ↗</a>
+    </nav>
+  </aside>
+
+  <main class="home-main">
+    <div class="home-intro">
+      <h1>Bem-vindo ao CurvionBH Simu</h1>
+      <p>
+        Ferramenta didática de computação gráfica para visualizar, na prática, como curvas de
+        Bézier e Hermite são construídas a partir de pontos de controle. Escolha um tipo de
+        curva ao lado, informe as coordenadas dos pontos no formulário lateral e clique em
+        "Desenhar Curva" — nada é desenhado até você clicar no botão. Cada tela mostra uma
+        grade de coordenadas, o valor exato de cada ponto, e permite exportar o resultado em PNG.
+      </p>
+    </div>
+
+    <section class="home-module home-module--bezier">
+      <div class="home-module-header">
+        <h2>Curvas de Bézier</h2>
+        <span class="count">3 variações</span>
+      </div>
+      <div class="home-grid">
+        <a class="home-card" href="./grau1.html">
+          <span class="dot" style="color:#e4342f"></span>
+          <h3>Bézier Linear</h3>
+          <p>Grau 1 — interpolação direta entre 2 pontos de controle.</p>
+        </a>
+        <a class="home-card" href="./quadratica.html">
+          <span class="dot" style="color:#2f8fe4"></span>
+          <h3>Bézier Quadrática</h3>
+          <p>Grau 2 — 3 pontos de controle definem a curvatura.</p>
+        </a>
+        <a class="home-card" href="./cubica.html">
+          <span class="dot" style="color:#e4c62f"></span>
+          <h3>Bézier Cúbica</h3>
+          <p>Grau 3 — 4 pontos de controle, a mais usada em gráficos vetoriais.</p>
+        </a>
+      </div>
+    </section>
+
+    <section class="home-module home-module--hermite">
+      <div class="home-module-header">
+        <h2>Curvas de Hermite</h2>
+        <span class="count">3 variações</span>
+      </div>
+      <div class="home-grid">
+        <a class="home-card" href="./hermite2.html">
+          <span class="dot" style="color:#22d3ee"></span>
+          <h3>Hermite 2 Pontos</h3>
+          <p>Ponto inicial, final e as tangentes em cada extremidade.</p>
+        </a>
+        <a class="home-card" href="./hermite3.html">
+          <span class="dot" style="color:#9b59e0"></span>
+          <h3>Hermite 3 Pontos</h3>
+          <p>Spline com 2 segmentos, unindo 3 pontos e suas tangentes.</p>
+        </a>
+        <a class="home-card" href="./hermite4.html">
+          <span class="dot" style="color:#2ecc71"></span>
+          <h3>Hermite 4 Pontos</h3>
+          <p>Spline com 3 segmentos, unindo 4 pontos e suas tangentes.</p>
+        </a>
+      </div>
+    </section>
+  </main>
 </div>
-</div>
-<h1 style="text-align: center; font-size: 50px">Curva de Bézier Quadrática</h1>
-
-<script type="text/paperscript" canvas="canvas-1">
-  function calc_pontos(P) {
-    var t = 0.025;
-    var cont = 0;
-    var resultados = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-    while (t < 1) {
-      resultados[cont] = P[0]*(1-t)*(1-t) + P[1]*2*(1-t)*t + P[2]*t*t;
-      cont += 1;
-      t += 0.025;
-    }
-    return resultados;
-  }
-  // 250 450 20 110 500 60
-
-  var R = [250, 450];
-  var G = [20, 110];
-  var B = [500, 60];
-
-  var Px = [R[0], G[0], B[0]];
-  var Py = [R[1], G[1], B[1]];
-
-  var firstPoint = new Point(R[0], R[1]);
-  var secondPoint = new Point(G[0], G[1]);
-  var thirdPoint = new Point(B[0], B[1]);
-
-  var path = new Path(firstPoint, secondPoint);
-  var path2 = new Path(secondPoint, thirdPoint);
-  path.strokeColor = 'black';
-  path2.strokeColor = 'black';
-  path.strokeWidth = 5;
-  path2.strokeWidth = 5;
-  
-  p = new Path.Circle(R, 10)
-  p.fillColor='red';
-  p = new Path.Circle(G, 10)
-  p.fillColor='green';
-  p = new Path.Circle(B, 10)
-  p.fillColor='blue';
-
-  var pontos_X = calc_pontos(Px);
-  var pontos_Y = calc_pontos(Py);
-
-  ponto = new Point(pontos_X[0],pontos_Y[0])
-  var caminho_ini = new Path(R, ponto);
-  caminho_ini.strokeColor = 'red';
-  caminho_ini.strokeWidth = 3;
-  p = new Path.Circle(ponto, 3.5)
-  p.fillColor='purple';
-  
-
-  for (var i = 0; i < 37; i++) {
-    ponto_A = new Point(pontos_X[i],pontos_Y[i])
-    ponto_B = new Point(pontos_X[i+1],pontos_Y[i+1])
-    var caminho = new Path(ponto_A, ponto_B);
-    caminho.strokeColor = 'red';
-    caminho.strokeWidth = 3;
-    p = new Path.Circle(ponto_A, 3.5)
-    p.fillColor='purple';
-  }  
-
-  ponto = new Point(pontos_X[i],pontos_Y[i])
-  var caminho_fim = new Path(ponto, B);
-  caminho_fim.strokeColor = 'red';
-  caminho_fim.strokeWidth = 3;
-  p = new Path.Circle(ponto, 3.5)
-  p.fillColor='purple';
-
-  ponto = new Point(pontos_X[i+1],pontos_Y[i+1])
-  p = new Path.Circle(ponto, 3.5)
-  p.fillColor='purple';
-</script>
-<div class="canvas">
-<canvas resize="true" id="canvas-1"></canvas>
-</div>
-</div>
-</article>
-  </body>
+</body>
 </html>

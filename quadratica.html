@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
-<title>CurvionBH Simu — Bézier Cúbica</title>
+<title>CurvionBH Simu — Bézier Quadrática</title>
 <link rel="stylesheet" href="./curvion.css"/>
 <script src="./paper.js"></script>
 </head>
@@ -19,8 +19,8 @@
       <ul>
         <li><a href="./index.html">◂ Início</a></li>
         <li><a href="./grau1.html">Bézier Linear</a></li>
-        <li><a href="./quadratica.html">Bézier Quadrática</a></li>
-        <li><a href="./cubica.html" class="active">Bézier Cúbica</a></li>
+        <li><a href="./quadratica.html" class="active">Bézier Quadrática</a></li>
+        <li><a href="./cubica.html">Bézier Cúbica</a></li>
         <li><a href="./hermite2.html">Hermite 2 Pontos</a></li>
         <li><a href="./hermite3.html">Hermite 3 Pontos</a></li>
         <li><a href="./hermite4.html">Hermite 4 Pontos</a></li>
@@ -31,37 +31,29 @@
     <hr class="divider"/>
 
     <form class="curve-form" onsubmit="return false;">
-      <p class="form-title">Curva de Bézier — Grau 3</p>
+      <p class="form-title">Curva de Bézier — Grau 2</p>
 
       <div class="point-group">
         <div class="label"><span class="dot" style="color:#e4342f"></span>Ponto Inicial (P0)</div>
         <div class="field-row">
-          <div class="field"><label for="p0-x">X</label><input type="number" step="any" id="p0-x" value="50"></div>
-          <div class="field"><label for="p0-y">Y</label><input type="number" step="any" id="p0-y" value="150"></div>
+          <div class="field"><label for="p0-x">X</label><input type="number" step="any" id="p0-x" value="250"></div>
+          <div class="field"><label for="p0-y">Y</label><input type="number" step="any" id="p0-y" value="450"></div>
         </div>
       </div>
 
       <div class="point-group">
         <div class="label"><span class="dot" style="color:#2ecc71"></span>Ponto de Controle (P1)</div>
         <div class="field-row">
-          <div class="field"><label for="p1-x">X</label><input type="number" step="any" id="p1-x" value="25"></div>
-          <div class="field"><label for="p1-y">Y</label><input type="number" step="any" id="p1-y" value="300"></div>
+          <div class="field"><label for="p1-x">X</label><input type="number" step="any" id="p1-x" value="20"></div>
+          <div class="field"><label for="p1-y">Y</label><input type="number" step="any" id="p1-y" value="110"></div>
         </div>
       </div>
 
       <div class="point-group">
-        <div class="label"><span class="dot" style="color:#2f8fe4"></span>Ponto de Controle (P2)</div>
+        <div class="label"><span class="dot" style="color:#2f8fe4"></span>Ponto Final (P2)</div>
         <div class="field-row">
-          <div class="field"><label for="p2-x">X</label><input type="number" step="any" id="p2-x" value="250"></div>
-          <div class="field"><label for="p2-y">Y</label><input type="number" step="any" id="p2-y" value="250"></div>
-        </div>
-      </div>
-
-      <div class="point-group">
-        <div class="label"><span class="dot" style="color:#e4c62f"></span>Ponto Final (P3)</div>
-        <div class="field-row">
-          <div class="field"><label for="p3-x">X</label><input type="number" step="any" id="p3-x" value="210"></div>
-          <div class="field"><label for="p3-y">Y</label><input type="number" step="any" id="p3-y" value="30"></div>
+          <div class="field"><label for="p2-x">X</label><input type="number" step="any" id="p2-x" value="500"></div>
+          <div class="field"><label for="p2-y">Y</label><input type="number" step="any" id="p2-y" value="60"></div>
         </div>
       </div>
 
@@ -73,7 +65,7 @@
   </aside>
 
   <main class="canvas-area">
-    <div class="canvas-title">Bézier Cúbica</div>
+    <div class="canvas-title">Bézier Quadrática</div>
     <div class="coord-readout" id="coord-readout"></div>
     <canvas id="canvas-1"></canvas>
     <p class="canvas-hint">Preencha as coordenadas e clique em "Desenhar Curva"</p>
@@ -88,9 +80,8 @@
     const P0 = Curvion.readPoint('p0');
     const P1 = Curvion.readPoint('p1');
     const P2 = Curvion.readPoint('p2');
-    const P3 = Curvion.readPoint('p3');
 
-    if (!Curvion.allValid([P0, P1, P2, P3])) {
+    if (!Curvion.allValid([P0, P1, P2])) {
       alert('Preencha todas as coordenadas com números válidos.');
       return;
     }
@@ -99,25 +90,22 @@
     Curvion.drawGrid();
     Curvion.drawLine(P0, P1, '#111111', 2);
     Curvion.drawLine(P1, P2, '#111111', 2);
-    Curvion.drawLine(P2, P3, '#111111', 2);
 
-    const curva = Curvion.sample((t) => Curvion.bezierCubic(t, P0, P1, P2, P3));
+    const curva = Curvion.sample((t) => Curvion.bezierQuadratic(t, P0, P1, P2));
     Curvion.drawPolyline(curva, '#e4342f', 3);
 
     Curvion.drawPoint(P0, '#e4342f', 8);
     Curvion.drawPoint(P1, '#2ecc71', 8);
     Curvion.drawPoint(P2, '#2f8fe4', 8);
-    Curvion.drawPoint(P3, '#e4c62f', 8);
     Curvion.drawLabel(P0, `P0 (${P0[0]}, ${P0[1]})`, '#e4342f');
     Curvion.drawLabel(P1, `P1 (${P1[0]}, ${P1[1]})`, '#2ecc71');
     Curvion.drawLabel(P2, `P2 (${P2[0]}, ${P2[1]})`, '#2f8fe4');
-    Curvion.drawLabel(P3, `P3 (${P3[0]}, ${P3[1]})`, '#a88c1f');
 
     document.getElementById('export-btn').disabled = false;
   });
 
   document.getElementById('export-btn').addEventListener('click', function () {
-    Curvion.exportPNG('bezier-cubica.png');
+    Curvion.exportPNG('bezier-quadratica.png');
   });
 </script>
 </body>

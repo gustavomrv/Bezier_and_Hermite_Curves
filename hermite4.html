@@ -1,224 +1,181 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
-  <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <meta name="apple-touch-fullscreen" content="yes"/>
-  <meta name="msapplication-tap-highlight" content="no"/>
-  <link rel="stylesheet" href="./style.css"/>
-  <script src="./jquery.js"></script>
-  <script src="./paper.js"></script>
-  <script src="./codemirror.js"></script>
-  <script src="./scripts.js"></script>
-  <title>Paper.js — Path Simplification</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
+<title>CurvionBH Simu — Hermite 4 Pontos</title>
+<link rel="stylesheet" href="./curvion.css"/>
+<script src="./paper.js"></script>
 </head>
-  <body class="fullscreen">
-    <nav>
-        <h1><a href="https://github.com/gustavomrv/Bezier_and_Hermite_Curves">Curve Simulator</a></h1>
-        <ul>  
-        <li><a href="https://github.com/gustavomrv/Bezier_and_Hermite_Curves">Código Completo</a>
-        <li class="spacer"></li>
-        <li><a href="./grau1.html">Bézier Linear</a>
-        <li class="spacer"></li>
-        <li><a href="./index.html">Bézier Quadrática</a>
-        <li class="spacer"></li>
-          <li><a href="./cubica.html">Bézier Cúbica</a>
-        <li class="spacer"></li>
-        <li class="spacer"></li>
-          <li><a href="./hermite2.html">Hermite 2 Pontos</a>
-        <li class="spacer"></li>
-        <li class="spacer"></li>
-          <li><a href="./hermite3.html">Hermite 3 Pontos</a>
-        <li class="spacer"></li>
-        <li class="spacer"></li>
-          <li><a href="./hermite4.html">Hermite 4 Pontos</a>
-        <li class="spacer"></li>
-        </nav>
-<article><div class="paperscript">
-<div class="buttons">
-<div class="button run">Source</div>
-<div class="explain">
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <p class="logo">CURVIONBH SIMU</p>
+      <p class="tagline">Simulador de Curvas Paramétricas</p>
+    </div>
 
+    <nav class="curve-nav">
+      <ul>
+        <li><a href="./index.html">◂ Início</a></li>
+        <li><a href="./grau1.html">Bézier Linear</a></li>
+        <li><a href="./quadratica.html">Bézier Quadrática</a></li>
+        <li><a href="./cubica.html">Bézier Cúbica</a></li>
+        <li><a href="./hermite2.html">Hermite 2 Pontos</a></li>
+        <li><a href="./hermite3.html">Hermite 3 Pontos</a></li>
+        <li><a href="./hermite4.html" class="active">Hermite 4 Pontos</a></li>
+      </ul>
+      <a class="external" href="https://github.com/gustavomrv/Bezier_and_Hermite_Curves" target="_blank" rel="noopener">Código completo no GitHub ↗</a>
+    </nav>
+
+    <hr class="divider"/>
+
+    <form class="curve-form" onsubmit="return false;">
+      <p class="form-title">Curva de Hermite — 4 Pontos</p>
+
+      <div class="point-group">
+        <div class="label"><span class="dot" style="color:#e4342f"></span>Ponto 1 (P0)</div>
+        <div class="field-row">
+          <div class="field"><label for="p0-x">X</label><input type="number" step="any" id="p0-x" value="115"></div>
+          <div class="field"><label for="p0-y">Y</label><input type="number" step="any" id="p0-y" value="70"></div>
+        </div>
+      </div>
+      <div class="point-group">
+        <div class="label"><span class="dot" style="color:#ff9f43"></span>Tangente 1 (T0)</div>
+        <div class="field-row">
+          <div class="field"><label for="t0-x">X</label><input type="number" step="any" id="t0-x" value="180"></div>
+          <div class="field"><label for="t0-y">Y</label><input type="number" step="any" id="t0-y" value="170"></div>
+        </div>
+      </div>
+
+      <div class="point-group">
+        <div class="label"><span class="dot" style="color:#2ecc71"></span>Ponto 2 (P1)</div>
+        <div class="field-row">
+          <div class="field"><label for="p1-x">X</label><input type="number" step="any" id="p1-x" value="90"></div>
+          <div class="field"><label for="p1-y">Y</label><input type="number" step="any" id="p1-y" value="260"></div>
+        </div>
+      </div>
+      <div class="point-group">
+        <div class="label"><span class="dot" style="color:#ff9f43"></span>Tangente 2 (T1)</div>
+        <div class="field-row">
+          <div class="field"><label for="t1-x">X</label><input type="number" step="any" id="t1-x" value="-165"></div>
+          <div class="field"><label for="t1-y">Y</label><input type="number" step="any" id="t1-y" value="-230"></div>
+        </div>
+      </div>
+
+      <div class="point-group">
+        <div class="label"><span class="dot" style="color:#2f8fe4"></span>Ponto 3 (P2)</div>
+        <div class="field-row">
+          <div class="field"><label for="p2-x">X</label><input type="number" step="any" id="p2-x" value="270"></div>
+          <div class="field"><label for="p2-y">Y</label><input type="number" step="any" id="p2-y" value="200"></div>
+        </div>
+      </div>
+      <div class="point-group">
+        <div class="label"><span class="dot" style="color:#ff9f43"></span>Tangente 3 (T2)</div>
+        <div class="field-row">
+          <div class="field"><label for="t2-x">X</label><input type="number" step="any" id="t2-x" value="100"></div>
+          <div class="field"><label for="t2-y">Y</label><input type="number" step="any" id="t2-y" value="-230"></div>
+        </div>
+      </div>
+
+      <div class="point-group">
+        <div class="label"><span class="dot" style="color:#e4c62f"></span>Ponto 4 (P3)</div>
+        <div class="field-row">
+          <div class="field"><label for="p3-x">X</label><input type="number" step="any" id="p3-x" value="85"></div>
+          <div class="field"><label for="p3-y">Y</label><input type="number" step="any" id="p3-y" value="65"></div>
+        </div>
+      </div>
+      <div class="point-group">
+        <div class="label"><span class="dot" style="color:#ff9f43"></span>Tangente 4 (T3)</div>
+        <div class="field-row">
+          <div class="field"><label for="t3-x">X</label><input type="number" step="any" id="t3-x" value="-55"></div>
+          <div class="field"><label for="t3-y">Y</label><input type="number" step="any" id="t3-y" value="170"></div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="draw-btn" id="draw-btn">Desenhar Curva</button>
+        <button type="button" class="export-btn" id="export-btn" disabled>Exportar PNG</button>
+      </div>
+    </form>
+  </aside>
+
+  <main class="canvas-area">
+    <div class="canvas-title">Hermite — 4 Pontos</div>
+    <div class="coord-readout" id="coord-readout"></div>
+    <canvas id="canvas-1"></canvas>
+    <p class="canvas-hint">Preencha as coordenadas e clique em "Desenhar Curva"</p>
+  </main>
 </div>
-</div>
-<h1 style="text-align: center; font-size: 50px">Curva de Hermite - 4 Pontos</h1>
 
-<script type="text/paperscript" canvas="canvas-1">
-  function calc_pontos(P_ini, P_fim, T_ini, T_fim) {
-    var t = 0.025;
-    var cont = 0;
-    var resultados = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-    while (t < 1) {
-        resultados[cont] = P_ini*(2*t*t*t-3*t*t+1) + P_fim*(3*t*t-2*t*t*t) + T_ini*(-2*t*t+t*t*t+t) + T_fim*(-(t*t)+t*t*t)
-        cont += 1;
-        t += 0.025;
-        if(cont == 36) {
-            console.log(cont, t);
-        }
-        console.log(resultados[36])
+<script src="./curvion.js"></script>
+<script>
+  Curvion.setup('canvas-1', 'coord-readout');
+
+  document.getElementById('draw-btn').addEventListener('click', function () {
+    const P0 = Curvion.readPoint('p0');
+    const P1 = Curvion.readPoint('p1');
+    const P2 = Curvion.readPoint('p2');
+    const P3 = Curvion.readPoint('p3');
+    const T0 = Curvion.readPoint('t0');
+    const T1 = Curvion.readPoint('t1');
+    const T2 = Curvion.readPoint('t2');
+    const T3 = Curvion.readPoint('t3');
+
+    if (!Curvion.allValid([P0, P1, P2, P3, T0, T1, T2, T3])) {
+      alert('Preencha todas as coordenadas com números válidos.');
+      return;
     }
-    return resultados;
-    }
 
-  var R = [115, 70];
-  var G = [90, 260];
-  var B = [270, 200];
-  var Y = [85, 65];
-  var T_R = [180, 170];
-  var T_G = [-165, -230];
-  var T_B = [100, -230];
-  var T_Y = [-55, 170];
+    Curvion.clear();
+    Curvion.drawGrid();
 
-  var firstPoint = new Point(R[0], R[1]);
-  var secondPoint = new Point(G[0], G[1]);
-  var thirdPoint = new Point(B[0], B[1]);
-  var fourthPoint = new Point(Y[0], Y[1]);
-  var t1Point = new Point(T_R[0], T_R[1]);
-  var t2Point = new Point(T_G[0], T_G[1]);
-  var t3Point = new Point(T_B[0], T_B[1]);
-  var t4Point = new Point(T_Y[0], T_Y[1]);
+    // Poligono de controle
+    Curvion.drawLine(P0, P1, '#111111', 2);
+    Curvion.drawLine(P1, P2, '#111111', 2);
+    Curvion.drawLine(P2, P3, '#111111', 2);
 
-  var path = new Path(firstPoint, secondPoint);
-  //path.strokeColor = 'black';
-  path.strokeWidth = 3;
-  var path = new Path(secondPoint, thirdPoint);
-  //path.strokeColor = 'black';
-  path.strokeWidth = 3;
-  var path = new Path(thirdPoint, fourthPoint);
-  //path.strokeColor = 'black';
-  path.strokeWidth = 3;
+    // Guias das tangentes
+    Curvion.drawLine(P0, T0, '#ff9f43', 2);
+    Curvion.drawLine(P1, T1, '#ff9f43', 2);
+    Curvion.drawLine(P2, T2, '#ff9f43', 2);
+    Curvion.drawLine(P3, T3, '#ff9f43', 2);
 
-  var path = new Path(firstPoint, t1Point);
-  path.strokeColor = 'orange';
-  path.strokeWidth = 2;
-  var path = new Path(secondPoint, t2Point);
-  path.strokeColor = 'orange';
-  path.strokeWidth = 2;
-  var path = new Path(thirdPoint, t3Point);
-  path.strokeColor = 'orange';
-  path.strokeWidth = 2;
-  var path = new Path(fourthPoint, t4Point);
-  path.strokeColor = 'orange';
-  path.strokeWidth = 2;
+    // Segmentos de Hermite (um por par de pontos consecutivos)
+    const segmento1 = Curvion.sample((t) => Curvion.hermite(t, P0, P1, T0, T1));
+    Curvion.drawPolyline(segmento1, '#e4342f', 3);
 
-  p = new Path.Circle(R, 10)
-  p.fillColor='red';
-  p = new Path.Circle(G, 10)
-  p.fillColor='green';
-  p = new Path.Circle(B, 10)
-  p.fillColor='blue';
-  p = new Path.Circle(Y, 10)
-  p.fillColor='yellow';
+    const segmento2 = Curvion.sample((t) => Curvion.hermite(t, P1, P2, T1, T2));
+    Curvion.drawPolyline(segmento2, '#22d3ee', 3);
 
-  p = new Path.Circle(T_R, 5)
-  p.fillColor='red';
-  p = new Path.Circle(T_G, 5)
-  p.fillColor='red';
-  p = new Path.Circle(T_B, 5)
-  p.fillColor='red';
-  p = new Path.Circle(T_Y, 5)
-  p.fillColor='red';
+    const segmento3 = Curvion.sample((t) => Curvion.hermite(t, P2, P3, T2, T3));
+    Curvion.drawPolyline(segmento3, '#9b59e0', 3);
 
-  var pontos_X = calc_pontos(R[0], G[0], T_R[0], T_G[0]);
-  var pontos_Y = calc_pontos(R[1], G[1], T_R[1], T_G[1]);  
+    // Pontos de controle e tangencia por cima das curvas
+    Curvion.drawPoint(P0, '#e4342f', 10);
+    Curvion.drawPoint(P1, '#2ecc71', 10);
+    Curvion.drawPoint(P2, '#2f8fe4', 10);
+    Curvion.drawPoint(P3, '#e4c62f', 10);
+    Curvion.drawPoint(T0, '#ff9f43', 5);
+    Curvion.drawPoint(T1, '#ff9f43', 5);
+    Curvion.drawPoint(T2, '#ff9f43', 5);
+    Curvion.drawPoint(T3, '#ff9f43', 5);
 
-  ponto = new Point(pontos_X[0],pontos_Y[0])
-  var caminho_ini = new Path(firstPoint, ponto);
-  caminho_ini.strokeColor = 'red';
-  caminho_ini.strokeWidth = 3;
-  p = new Path.Circle(ponto, 3.5)
-  p.fillColor='purple';
+    Curvion.drawLabel(P0, `P0 (${P0[0]}, ${P0[1]})`, '#e4342f');
+    Curvion.drawLabel(P1, `P1 (${P1[0]}, ${P1[1]})`, '#2ecc71');
+    Curvion.drawLabel(P2, `P2 (${P2[0]}, ${P2[1]})`, '#2f8fe4');
+    Curvion.drawLabel(P3, `P3 (${P3[0]}, ${P3[1]})`, '#a88c1f');
+    Curvion.drawLabel(T0, `T0 (${T0[0]}, ${T0[1]})`, '#c97418');
+    Curvion.drawLabel(T1, `T1 (${T1[0]}, ${T1[1]})`, '#c97418');
+    Curvion.drawLabel(T2, `T2 (${T2[0]}, ${T2[1]})`, '#c97418');
+    Curvion.drawLabel(T3, `T3 (${T3[0]}, ${T3[1]})`, '#c97418');
 
-  for (var i = 0; i < 37; i++) {
-    ponto_A = new Point(pontos_X[i],pontos_Y[i])
-    ponto_B = new Point(pontos_X[i+1],pontos_Y[i+1])
-    var caminho = new Path(ponto_A, ponto_B);
-    caminho.strokeColor = 'red';
-    caminho.strokeWidth = 3;
-    p = new Path.Circle(ponto_A, 3.5)
-    p.fillColor='purple';
-  }  
+    document.getElementById('export-btn').disabled = false;
+  });
 
-  ponto = new Point(pontos_X[i],pontos_Y[i])
-  var caminho_fim = new Path(ponto, secondPoint);
-  caminho_fim.strokeColor = 'red';
-  caminho_fim.strokeWidth = 3;
-  p = new Path.Circle(ponto, 3.5)
-  p.fillColor='purple';
-
-  ponto = new Point(pontos_X[i+1],pontos_Y[i+1])
-  p = new Path.Circle(ponto, 3.5)
-  p.fillColor='purple';
-
-  var pontos_X = calc_pontos(G[0], B[0], T_G[0], T_B[0]);
-  var pontos_Y = calc_pontos(G[1], B[1], T_G[1], T_B[1]);  
-  
-  ponto = new Point(pontos_X[0],pontos_Y[0])
-  var caminho_ini = new Path(secondPoint, ponto);
-  caminho_ini.strokeColor = 'red';
-  caminho_ini.strokeWidth = 3;
-  p = new Path.Circle(ponto, 3.5)
-  p.fillColor='cyan';
-
-  for (var i = 0; i < 37; i++) {
-    ponto_A = new Point(pontos_X[i],pontos_Y[i])
-    ponto_B = new Point(pontos_X[i+1],pontos_Y[i+1])
-    var caminho = new Path(ponto_A, ponto_B);
-    caminho.strokeColor = 'red';
-    caminho.strokeWidth = 3;
-    p = new Path.Circle(ponto_A, 3.5)
-    p.fillColor='cyan';
-  }  
-
-  ponto = new Point(pontos_X[i],pontos_Y[i])
-  var caminho_fim = new Path(ponto, thirdPoint);
-  caminho_fim.strokeColor = 'red';
-  caminho_fim.strokeWidth = 3;
-  p = new Path.Circle(ponto, 3.5)
-  p.fillColor='cyan';
-
-  ponto = new Point(pontos_X[i+1],pontos_Y[i+1])
-  p = new Path.Circle(ponto, 3.5)
-  p.fillColor='cyan';
-
-  var pontos_X = calc_pontos(B[0], Y[0], T_B[0], T_Y[0]);
-  var pontos_Y = calc_pontos(B[1], Y[1], T_B[1], T_Y[1]);  
-  
-  ponto = new Point(pontos_X[0],pontos_Y[0])
-  var caminho_ini = new Path(thirdPoint, ponto);
-  caminho_ini.strokeColor = 'red';
-  caminho_ini.strokeWidth = 3;
-  p = new Path.Circle(ponto, 3.5)
-  p.fillColor='purple';
-
-  for (var i = 0; i < 37; i++) {
-    ponto_A = new Point(pontos_X[i],pontos_Y[i])
-    ponto_B = new Point(pontos_X[i+1],pontos_Y[i+1])
-    var caminho = new Path(ponto_A, ponto_B);
-    caminho.strokeColor = 'red';
-    caminho.strokeWidth = 3;
-    p = new Path.Circle(ponto_A, 3.5)
-    p.fillColor='purple';
-  }  
-
-  ponto = new Point(pontos_X[i],pontos_Y[i])
-  var caminho_fim = new Path(ponto, fourthPoint);
-  caminho_fim.strokeColor = 'red';
-  caminho_fim.strokeWidth = 3;
-  p = new Path.Circle(ponto, 3.5)
-  p.fillColor='purple';
-
-  ponto = new Point(pontos_X[i+1],pontos_Y[i+1])
-  p = new Path.Circle(ponto, 3.5)
-  p.fillColor='purple';
+  document.getElementById('export-btn').addEventListener('click', function () {
+    Curvion.exportPNG('hermite-4-pontos.png');
+  });
 </script>
-<div class="canvas">
-<canvas resize="true" id="canvas-1"></canvas>
-</div>
-</div>
-</article>
-  </body>
+</body>
 </html>
