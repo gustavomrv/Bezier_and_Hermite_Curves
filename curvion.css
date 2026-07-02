@@ -64,6 +64,11 @@ html, body {
 .brand {
   text-align: center;
 }
+.brand-logo-icon {
+  display: block;
+  margin: 0 auto 8px;
+  filter: drop-shadow(0 0 6px rgba(57, 255, 136, 0.45));
+}
 .brand .logo {
   font-family: "Roboto Mono", "Consolas", "Courier New", monospace;
   font-size: 26px;
@@ -162,6 +167,7 @@ nav.curve-nav .external:hover {
   height: 10px;
   border-radius: 50%;
   display: inline-block;
+  background: currentColor;
   box-shadow: 0 0 6px currentColor;
   flex: 0 0 auto;
   filter: brightness(1.35) saturate(1.1);
