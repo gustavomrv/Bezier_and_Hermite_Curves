@@ -114,17 +114,6 @@ nav.curve-nav a.active {
   border-color: var(--cyan);
   font-weight: 600;
 }
-nav.curve-nav .external {
-  display: block;
-  color: var(--muted);
-  font-size: 11px;
-  margin-top: 8px;
-  text-decoration: none;
-}
-nav.curve-nav .external:hover {
-  color: var(--cyan);
-}
-
 .divider {
   height: 1px;
   background: var(--border);
